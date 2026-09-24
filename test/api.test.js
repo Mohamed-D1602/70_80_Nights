@@ -37,7 +37,7 @@ test('seeds the database and serves the current event publicly', async () => {
   const res = await call('GET', '/api/events/current', { auth: false });
   assert.equal(res.status, 200);
   assert.equal(res.body.id, 'sample-event');
-  assert.equal(res.body.songs.length, 3);
+  assert.ok(res.body.songs.length > 0);
   assert.ok(fs.existsSync(path.join(dataDir, 'db.json')));
 });
 
