@@ -1,0 +1,437 @@
+/* ==========================================================================
+   70/80 Nights — attendee styles
+   Dark by default (it's a night event), large high-contrast lyrics,
+   RTL-first layout. Colours are tokens so a light theme is one override.
+   ========================================================================== */
+
+:root,
+:root[data-theme='dark'] {
+  --bg: #0c0a09;
+  --surface: #1c1917;
+  --surface-2: #292524;
+  --text: #fbf6ea;
+  --text-muted: #b8ad9a;
+  --accent: #f5b544; /* warm 70s amber */
+  --accent-ink: #1c1206;
+  --chorus-bg: rgba(245, 181, 68, 0.09);
+  --border: #3a332d;
+  --focus: #ffd98a;
+  --lyrics-size: 28px;
+  --font-lyrics: 'Noto Naskh Arabic', 'Geeza Pro', 'Arial', serif;
+  --font-ui: 'Cairo', 'Segoe UI', 'Tahoma', sans-serif;
+  --radius: 14px;
+  --nav-h: 72px;
+  color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  --bg: #f7f1e3;
+  --surface: #fffaf0;
+  --surface-2: #efe5cf;
+  --text: #1a1410;
+  --text-muted: #5f5445;
+  --accent: #a34f00;
+  --accent-ink: #fff;
+  --chorus-bg: rgba(163, 79, 0, 0.08);
+  --border: #d9cbb0;
+  --focus: #a34f00;
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: hidden;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.icon {
+  display: inline-flex;
+  line-height: 0;
+}
+
+.page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 16px;
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
+}
+
+.page-message {
+  min-height: 70vh;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.page-message h1 {
+  color: var(--text);
+  margin: 0 0 8px;
+}
+
+.empty {
+  color: var(--text-muted);
+  text-align: center;
+  padding: 32px 0;
+}
+
+/* ---------- Covers ---------- */
+
+.cover {
+  flex: none;
+  border-radius: 10px;
+  object-fit: cover;
+  background: var(--surface-2);
+}
+
+.cover-md {
+  width: 56px;
+  height: 56px;
+}
+
+.cover-lg {
+  width: 88px;
+  height: 88px;
+  border-radius: 12px;
+}
+
+.cover-placeholder {
+  display: grid;
+  place-items: center;
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 700;
+  font-size: 1.4em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.cover-lg.cover-placeholder {
+  font-size: 2.2em;
+}
+
+/* ---------- Song list ---------- */
+
+.event-header {
+  padding: 36px 0 20px;
+  padding-top: max(36px, env(safe-area-inset-top));
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 6px;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.eyebrow .icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.event-title {
+  margin: 0;
+  font-size: clamp(1.7rem, 6vw, 2.4rem);
+  line-height: 1.3;
+}
+
+.event-meta {
+  margin: 8px 0 0;
+  color: var(--text-muted);
+}
+
+.event-description {
+  margin: 12px 0 0;
+  color: var(--text-muted);
+  white-space: pre-line;
+}
+
+.song-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 40px;
+  display: grid;
+  gap: 10px;
+}
+
+.song-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px;
+  min-height: 80px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.12s ease, border-color 0.12s ease;
+}
+
+.song-card:active {
+  transform: scale(0.985);
+}
+
+@media (hover: hover) {
+  .song-card:hover {
+    border-color: var(--accent);
+  }
+}
+
+.song-card-text {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+}
+
+.song-card-title {
+  font-weight: 700;
+  font-size: 1.15rem;
+  line-height: 1.4;
+}
+
+.song-card-artist {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.song-card-number {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+/* ---------- Lyrics viewer ---------- */
+
+.page-lyrics {
+  padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom) + 24px);
+}
+
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0 -16px;
+  padding: 8px 12px;
+  padding-top: max(8px, env(safe-area-inset-top));
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+
+.toolbar-group {
+  display: flex;
+  gap: 4px;
+}
+
+.counter {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.icon-btn {
+  display: inline-grid;
+  place-items: center;
+  min-width: 44px;
+  height: 44px;
+  padding: 0 8px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.text-btn {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.song-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 0 8px;
+}
+
+.song-title {
+  margin: 0;
+  font-size: clamp(1.6rem, 6vw, 2.2rem);
+  line-height: 1.3;
+}
+
+.song-artist {
+  margin: 2px 0 0;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.song-notes {
+  margin: 4px 0 0;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.lyrics {
+  font-family: var(--font-lyrics);
+  font-size: var(--lyrics-size);
+  font-weight: 500;
+  line-height: 1.6;
+  /* Arabic is RTL; `plaintext` lets a stray Latin line lay itself out correctly. */
+  unicode-bidi: plaintext;
+  text-align: center;
+  padding: 12px 0;
+}
+
+.stanza {
+  margin: 0 0 1.1em;
+  padding: 0.35em 0.5em;
+  border-radius: var(--radius);
+}
+
+.stanza-chorus {
+  background: var(--chorus-bg);
+  border-inline-start: 4px solid var(--accent);
+  font-weight: 700;
+}
+
+.stanza-label {
+  margin: 0 0 0.2em;
+  font-family: var(--font-ui);
+  font-size: 0.5em;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+}
+
+.lyric-line {
+  /* Spacing between sung lines is larger than between wrapped rows of one
+     line, so a long line that wraps still reads as a single line. */
+  margin: 0 0 0.45em;
+  unicode-bidi: plaintext;
+  overflow-wrap: anywhere;
+}
+
+.up-next {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0 0;
+  padding: 16px;
+  border-radius: var(--radius);
+  border: 1px dashed var(--border);
+  background: transparent;
+  text-align: start;
+}
+
+.up-next-label {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.up-next-title {
+  flex: 1;
+  font-weight: 700;
+}
+
+.end-note {
+  text-align: center;
+  color: var(--text-muted);
+  margin: 24px 0 0;
+}
+
+.bottom-nav {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  padding: 10px 16px;
+  padding-bottom: max(10px, env(safe-area-inset-bottom));
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid var(--border);
+}
+
+.nav-btn {
+  flex: 1;
+  max-width: 360px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 52px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.nav-btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.nav-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* Wider screens (tablets/laptops): roomier layout */
+@media (min-width: 720px) {
+  .song-list {
+    grid-template-columns: 1fr 1fr;
+  }
+  .cover-lg {
+    width: 112px;
+    height: 112px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}

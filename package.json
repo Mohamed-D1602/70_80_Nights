@@ -1,0 +1,18 @@
+{
+  "name": "70-80-nights",
+  "version": "1.0.0",
+  "description": "Sing-along lyrics app for a monthly night of classic Sudanese songs from the 1970s and 1980s",
+  "main": "server/index.js",
+  "private": true,
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "test": "node --test \"test/*.test.*\""
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
