@@ -60,7 +60,7 @@ You can also edit `public/data/db.json` directly on github.com. If you do that w
 
 ## Node server: quick start (local)
 
-Requirements: **Node.js 22 or newer** (`node -v`).
+Requirements: **Node.js 22.12 or newer** (`node -v`).
 
 ```bash
 git clone <your repo url> 70_80_Nights
