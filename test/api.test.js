@@ -115,9 +115,24 @@ test('deleting the live event clears the current event', async () => {
   assert.equal((await call('GET', '/api/events/current', { auth: false })).status, 404);
 });
 
+test('duplicates an event with new song ids, unpublished', async () => {
+  const ev = await call('POST', '/api/admin/events', { body: { title: 'Dec' } });
+  const song = await call('POST', `/api/admin/events/${ev.body.id}/songs`, { body: { title: 'S', lyrics: 'x' } });
+  const copy = await call('POST', `/api/admin/events/${ev.body.id}/duplicate`);
+  assert.equal(copy.status, 201);
+  assert.equal(copy.body.title, 'Dec (copy)');
+  assert.equal(copy.body.published, false);
+  assert.equal(copy.body.songs.length, 1);
+  assert.notEqual(copy.body.songs[0].id, song.body.id);
+  assert.equal(copy.body.songs[0].lyrics, 'x');
+});
+
 test('serves the attendee app and admin page', async () => {
   const home = await fetch(`${base}/`);
   assert.match(await home.text(), /dir="rtl"/);
-  const admin = await fetch(`${base}/admin`);
-  assert.match(await admin.text(), /Admin/);
+  const admin = await fetch(`${base}/admin`, { redirect: 'manual' });
+  assert.equal(admin.headers.get('location'), '/admin.html');
+  assert.match(await (await fetch(`${base}/admin.html`)).text(), /Admin/);
+  // The static data file used by GitHub Pages is also served.
+  assert.equal((await fetch(`${base}/data/db.json`)).status, 200);
 });

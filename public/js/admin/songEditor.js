@@ -72,7 +72,7 @@ export function SongEditor({ event, song, actions }) {
         : h('button', { class: 'btn btn-danger', type: 'button', onclick: () => actions.deleteSong(event.id, song) }, 'Delete song'),
       isNew
         ? null
-        : h('a', { class: 'btn', href: `/#/song/${encodeURIComponent(song.id)}`, target: '_blank', rel: 'noopener' }, 'View as attendee ↗')
+        : h('a', { class: 'btn', href: `./#/song/${encodeURIComponent(song.id)}`, target: '_blank', rel: 'noopener' }, 'View as attendee ↗')
     )
   );
 

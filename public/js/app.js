@@ -93,5 +93,5 @@ load();
 // Offline support: cache the app + lyrics so a patchy venue connection
 // doesn't break the night.
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}));
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 }

@@ -420,3 +420,34 @@ textarea:focus {
   background: #7a2620;
   color: #fff0ee;
 }
+
+.toast-info {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.mode-note {
+  margin: 0;
+  padding: 10px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.mode-note a {
+  color: var(--accent);
+}
+
+.small {
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.details-body {
+  margin-top: 10px;
+}
+
+summary {
+  cursor: pointer;
+}

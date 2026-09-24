@@ -1,10 +1,10 @@
 const path = require('path');
 const express = require('express');
-const { Store } = require('./store');
+const { openStore } = require('./store');
 const { createAuth } = require('./auth');
 
 function createApp({ dataDir, adminPassword, sessionSecret }) {
-  const store = new Store(dataDir);
+  const store = openStore(dataDir);
   const auth = createAuth({ password: adminPassword, secret: sessionSecret });
   const app = express();
 
@@ -80,6 +80,12 @@ function createApp({ dataDir, adminPassword, sessionSecret }) {
     res.status(201).json(store.createEvent(req.body || {}));
   });
 
+  admin.post('/events/:id/duplicate', (req, res) => {
+    const copy = store.duplicateEvent(req.params.id);
+    if (!copy) return res.status(404).json({ error: 'Event not found' });
+    res.status(201).json(copy);
+  });
+
   admin.put('/events/:id', (req, res) => {
     const event = store.updateEvent(req.params.id, req.body || {});
     if (!event) return res.status(404).json({ error: 'Event not found' });
@@ -153,9 +159,11 @@ function createApp({ dataDir, adminPassword, sessionSecret }) {
       },
     })
   );
-  app.get('/admin', (req, res) => res.sendFile(path.join(publicDir, 'admin.html')));
-  // The attendee app uses hash routes (#/song/...), so every other path gets index.html.
-  app.get('*', (req, res) => res.sendFile(path.join(publicDir, 'index.html')));
+  // Asset URLs in the HTML are relative (so the same files work on GitHub
+  // Pages under /<repo>/), so pages must be served from the site root.
+  app.get(['/admin', '/admin/'], (req, res) => res.redirect(301, '/admin.html'));
+  // The attendee app uses hash routes (#/song/...); any other path goes home.
+  app.get('*', (req, res) => res.redirect('/'));
 
   app.use((err, req, res, next) => {
     if (err.type === 'entity.parse.failed') return res.status(400).json({ error: 'Invalid JSON' });

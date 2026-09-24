@@ -2,12 +2,13 @@
 // re-renders the panels after every change.
 
 import { h } from '../dom.js';
-import * as api from './adminApi.js';
+import { getBackend, AuthError } from './adminApi.js';
 import { renderLoginForm } from './loginForm.js';
 import { EventPanel } from './eventPanel.js';
 import { SongsPanel } from './songsPanel.js';
 import { SongEditor } from './songEditor.js';
 
+const api = await getBackend(); // server (password) or GitHub Pages (token)
 const root = document.getElementById('admin');
 const toastEl = document.getElementById('toast');
 
@@ -24,7 +25,7 @@ function toast(message, kind = 'ok') {
   toastEl.className = `toast toast-${kind}`;
   toastEl.hidden = false;
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => (toastEl.hidden = true), kind === 'error' ? 6000 : 2500);
+  if (kind !== 'info') toastTimer = setTimeout(() => (toastEl.hidden = true), kind === 'error' ? 8000 : 2500);
 }
 
 function confirmDiscard() {
@@ -38,13 +39,15 @@ window.addEventListener('beforeunload', (e) => {
 // Runs an API call, shows the result, refreshes state. Returns the call's
 // result, or undefined if it failed.
 async function run(fn, successMessage) {
+  toast('Saving…', 'info');
   try {
     const result = await fn();
     if (successMessage) toast(successMessage);
+    else toastEl.hidden = true;
     await refresh();
     return result;
   } catch (err) {
-    if (err instanceof api.AuthError) {
+    if (err instanceof AuthError) {
       editor = null;
       showLogin();
     }
@@ -96,11 +99,7 @@ const actions = {
   // Copy an event with all its songs, e.g. to start next month from this month's list.
   async duplicateEvent(event) {
     if (!confirmDiscard()) return;
-    const copy = await run(async () => {
-      const created = await api.createEvent({ ...event, title: `${event.title} (copy)`, published: false });
-      for (const song of event.songs) await api.addSong(created.id, song);
-      return created;
-    }, 'Event duplicated (unpublished)');
+    const copy = await run(() => api.duplicateEvent(event.id), 'Event duplicated (unpublished)');
     if (copy) {
       selectedEventId = copy.id;
       selectedSongId = null;
@@ -190,7 +189,8 @@ const actions = {
 function render() {
   const event = state.events.find((e) => e.id === selectedEventId);
   const song = event && event.songs.find((s) => s.id === selectedSongId);
-  const publicUrl = location.origin + '/';
+  const publicUrl = new URL('./', location.href).href; // index.html sits next to admin.html
+  const repo = api.mode === 'github' ? api.repoInfo() : null;
 
   const fileInput = h('input', {
     type: 'file',
@@ -209,7 +209,7 @@ function render() {
     h(
       'div',
       { class: 'btn-row' },
-      h('a', { class: 'btn btn-small', href: '/', target: '_blank', rel: 'noopener' }, 'Open attendee view ↗'),
+      h('a', { class: 'btn btn-small', href: './', target: '_blank', rel: 'noopener' }, 'Open attendee view ↗'),
       h(
         'button',
         {
@@ -235,8 +235,19 @@ function render() {
         h('p', { class: 'muted' }, event ? 'Select a song on the left to edit it, or add a new one.' : 'Create an event to begin.')
       );
 
+  const githubNote = repo
+    ? h(
+        'p',
+        { class: 'mode-note' },
+        `Hosted on GitHub Pages: each save is a commit to ${repo.owner}/${repo.repo} (${repo.branch}). `,
+        'Attendees see changes after the site redeploys, usually 1–2 minutes. ',
+        h('a', { href: `https://github.com/${repo.owner}/${repo.repo}/actions`, target: '_blank', rel: 'noopener' }, 'Deploy status ↗')
+      )
+    : null;
+
   root.replaceChildren(
     header,
+    githubNote,
     h(
       'div',
       { class: 'admin-layout' },
@@ -247,15 +258,15 @@ function render() {
 }
 
 function showLogin() {
-  renderLoginForm(root, { onLoggedIn: () => start() });
+  renderLoginForm(root, { api, onLoggedIn: () => start() });
 }
 
 async function start() {
-  if (!api.getToken()) return showLogin();
+  if (!api.isLoggedIn()) return showLogin();
   try {
     await refresh();
   } catch (err) {
-    if (!(err instanceof api.AuthError)) toast(err.message, 'error');
+    if (!(err instanceof AuthError)) toast(err.message, 'error');
     showLogin();
   }
 }
