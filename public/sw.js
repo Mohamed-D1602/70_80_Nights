@@ -7,7 +7,7 @@
 //
 // Bump VERSION to force old caches to be dropped.
 
-const VERSION = 'v2';
+const VERSION = 'v3';
 const CACHE = `nights-${VERSION}`;
 // Paths are relative to the service worker's folder, so this works at the
 // site root and under a sub-path such as https://<user>.github.io/<repo>/.
@@ -22,6 +22,7 @@ const SHELL = [
   'js/lyrics.js',
   'js/prefs.js',
   'js/wakeLock.js',
+  'js/video.js',
   'js/shared/db.js',
   'js/components/songList.js',
   'js/components/lyricsViewer.js',

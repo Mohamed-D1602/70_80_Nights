@@ -61,6 +61,7 @@ export function logout() {
 }
 
 export const getState = () => request('GET', '/state');
+export const updateSite = (fields) => request('PUT', '/site', fields);
 export const createEvent = (fields) => request('POST', '/events', fields);
 export const duplicateEvent = (id) => request('POST', `/events/${id}/duplicate`);
 export const updateEvent = (id, fields) => request('PUT', `/events/${id}`, fields);

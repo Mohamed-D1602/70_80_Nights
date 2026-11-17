@@ -1,15 +1,20 @@
-# 70/80 Nights — Sing-along lyrics app
+# جمعية وطن الجمال — website
 
-A small web app for a monthly sing-along night of classic Sudanese songs from the 1970s and 1980s. Attendees scan a QR code at the venue and follow the lyrics on their phones. You manage each month's song list and lyrics from an admin page, with no code changes.
+Website for **جمعية وطن الجمال**, an idea by **Dr. Tigani Mursy (د. التجاني مرسي)**: a group within the Nubian association in Reading that holds about four *ليالي سمر* a year. These are family evenings around tables, with no speeches, where people listen to and watch classic Sudanese music and song clips together. The aim is "رفع الفراش": giving Sudanese families occasions to meet in joy, not only at funerals.
 
-- **Attendee view (`/`)**: Arabic RTL layout, dark theme by default, large high-contrast lyrics. Songs are navigated by swipe, next/previous buttons, or arrow keys. No login.
-- **Admin page (`/admin`)**: protected by a password (Node server) or a GitHub token (GitHub Pages). Add, edit, reorder, and delete songs. Manage several monthly events and choose which one is live. Download and restore backups.
+- **Public site (`/`)**: Arabic, right to left, dark by default. It shows the group's tagline, the next evening and its **program** (video clips, songs, optional sing-along lyrics), other upcoming evenings, and "عن الفكرة" with the founder credit. No login.
+- **Admin page (`/admin`)**: protected by a GitHub token (GitHub Pages) or a password (Node server). Edit the front-page text, create evenings, add, reorder, and delete program segments (paste a YouTube link, lyrics optional), choose which evening is shown, and download and restore backups.
+
+The sections below still use the code's original words: an *event* is an evening, and a *song* is a program segment.
 
 ## Features
 
 | Area | What it does |
 |---|---|
-| Playlist | The home screen lists the live event's songs with title, artist, and a cover image or a numbered placeholder. |
+| Front page | The group name, tagline, "about the idea" text and founder credit, all editable in the admin page under **Site text**. |
+| Program | The next evening's segments, each with title, performer, and a cover (your image, the YouTube thumbnail, or a numbered tile). A ▶ badge marks segments with a video. |
+| Video | A YouTube link becomes an embedded player (privacy-enhanced youtube-nocookie.com), with an "open the clip" link as a fallback. Other links become a button. |
+| Upcoming evenings | Other published evenings with a future date are listed on the front page. |
 | Lyrics | Large Arabic text (Noto Naskh Arabic), stanza spacing, section labels, and a highlighted chorus so people know when to join in. |
 | Navigation | Next/previous buttons, swipe (RTL: swipe right for the next song, like turning an Arabic page), ←/→ keys, and a "next song" card at the end of each song. |
 | Comfort | Font size A-/A+ and a dark/light toggle, remembered on each phone. The screen stays on while lyrics are open (Wake Lock API, where supported). |

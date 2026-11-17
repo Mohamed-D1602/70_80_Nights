@@ -34,3 +34,11 @@ test('replaceAll rejects invalid data and keeps the old data', () => {
   assert.throws(() => db.replaceAll({ nope: 1 }));
   assert.equal(db.getEvent('a').title, 'A');
 });
+
+test('video links: only http(s) kept; old data gets default site text', () => {
+  const db = new Db({ events: [] });
+  const ev = db.createEvent({ title: 'e' });
+  assert.equal(db.addSong(ev.id, { videoUrl: 'https://youtu.be/abcdefghijk' }).videoUrl, 'https://youtu.be/abcdefghijk');
+  assert.equal(db.addSong(ev.id, { videoUrl: 'javascript:alert(1)' }).videoUrl, '');
+  assert.equal(db.getSite().name, 'جمعية وطن الجمال');
+});

@@ -27,7 +27,7 @@ export function renderLoginForm(container, { api, onLoggedIn }) {
         }
       },
     },
-    h('h1', {}, '70/80 Nights — Admin'),
+    h('h1', {}, 'جمعية وطن الجمال — Admin'),
     fields,
     error,
     button

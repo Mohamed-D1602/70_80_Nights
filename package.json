@@ -1,7 +1,7 @@
 {
   "name": "70-80-nights",
   "version": "1.0.0",
-  "description": "Sing-along lyrics app for a monthly night of classic Sudanese songs from the 1970s and 1980s",
+  "description": "Website for جمعية وطن الجمال: family evenings of Sudanese music and song clips",
   "main": "server/index.js",
   "private": true,
   "scripts": {

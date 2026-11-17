@@ -5,10 +5,12 @@
 //
 // Shape:
 // {
+//   "site": { "name", "tagline", "about", "founder" },   ← front-page text, editable in admin
 //   "settings": { "currentEventId": "..." },
 //   "events": [
 //     { "id", "title", "date", "venue", "description", "published", "createdAt", "updatedAt",
-//       "songs": [ { "id", "title", "artist", "coverUrl", "lyrics", "notes" } ] }
+//       "songs": [ { "id", "title", "artist", "coverUrl", "videoUrl", "lyrics", "notes" } ] }
+//   ("songs" are the evening's program segments: a clip, a song, a sing-along)
 //   ]
 // }
 
@@ -40,6 +42,16 @@ export class Db {
   getCurrentEvent() {
     const current = this.getEvent(this.data.settings.currentEventId);
     return current && current.published ? current : null;
+  }
+
+  getSite() {
+    return this.data.site;
+  }
+
+  updateSite(fields) {
+    this.data.site = siteFields({ ...this.data.site, ...fields });
+    this.changed();
+    return this.data.site;
   }
 
   getSettings() {
@@ -168,6 +180,27 @@ function safeUrl(value) {
   return url; // relative path such as covers/song.jpg
 }
 
+function httpUrl(value) {
+  const url = str(value, 2000);
+  return /^https?:\/\//i.test(url) ? url : '';
+}
+
+export const DEFAULT_SITE = {
+  name: 'جمعية وطن الجمال',
+  tagline: 'ليالي سمر وطرب لرفع الفراش عن الأسر السودانية',
+  about: '',
+  founder: '',
+};
+
+function siteFields(f) {
+  return {
+    name: str(f.name, 120) || DEFAULT_SITE.name,
+    tagline: str(f.tagline, 300),
+    about: typeof f.about === 'string' ? f.about.replace(/\r\n?/g, '\n').trim().slice(0, 5000) : '',
+    founder: str(f.founder, 200),
+  };
+}
+
 function eventFields(f) {
   return {
     title: str(f.title, 200) || 'Untitled event',
@@ -183,6 +216,7 @@ function songFields(f) {
     title: str(f.title, 200) || 'Untitled song',
     artist: str(f.artist, 200),
     coverUrl: safeUrl(f.coverUrl),
+    videoUrl: httpUrl(f.videoUrl),
     // Lyrics keep their inner whitespace/line breaks; only normalise newlines.
     lyrics: typeof f.lyrics === 'string' ? f.lyrics.replace(/\r\n?/g, '\n').slice(0, 50000) : '',
     notes: str(f.notes, 500),
@@ -205,6 +239,7 @@ export function normalizeDb(raw) {
   }));
   const currentEventId = raw.settings && raw.settings.currentEventId;
   return {
+    site: siteFields(raw.site || DEFAULT_SITE),
     settings: { currentEventId: events.some((e) => e.id === currentEventId) ? currentEventId : null },
     events,
   };

@@ -41,9 +41,9 @@ export function SongsPanel({ event, selectedSongId, actions }) {
     h(
       'div',
       { class: 'panel-head' },
-      h('h2', {}, `Songs (${event.songs.length})`),
-      h('button', { class: 'btn btn-small btn-accent', onclick: () => actions.selectSong('new') }, '+ Add song')
+      h('h2', {}, `Program (${event.songs.length})`),
+      h('button', { class: 'btn btn-small btn-accent', onclick: () => actions.selectSong('new') }, '+ Add segment')
     ),
-    items.length ? h('ol', { class: 'song-rows' }, items) : h('p', { class: 'muted' }, 'No songs yet.')
+    items.length ? h('ol', { class: 'song-rows' }, items) : h('p', { class: 'muted' }, 'No segments yet.')
   );
 }

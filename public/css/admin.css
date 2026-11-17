@@ -451,3 +451,26 @@ textarea:focus {
 summary {
   cursor: pointer;
 }
+
+.site-panel > summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.site-panel > summary::-webkit-details-marker {
+  display: none;
+}
+
+.site-panel > summary h2::after {
+  content: ' ▾';
+  color: var(--text-muted);
+}
+
+.video-preview:empty {
+  display: none;
+}
+
+.video-preview .video {
+  max-width: 480px;
+  margin: 0;
+}

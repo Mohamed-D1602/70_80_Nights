@@ -37,6 +37,9 @@ function createApp({ dataDir, adminPassword, sessionSecret }) {
     );
   });
 
+  // Front-page text (group name, about the idea, founder).
+  pub.get('/site', (req, res) => res.json(store.getSite()));
+
   pub.get('/events/current', (req, res) => {
     const event = store.getCurrentEvent();
     if (!event) return res.status(404).json({ error: 'No event is scheduled yet' });
@@ -73,7 +76,11 @@ function createApp({ dataDir, adminPassword, sessionSecret }) {
   });
 
   admin.get('/state', (req, res) => {
-    res.json({ settings: store.getSettings(), events: store.listEvents() });
+    res.json(store.toJSON());
+  });
+
+  admin.put('/site', (req, res) => {
+    res.json(store.updateSite(req.body || {}));
   });
 
   admin.post('/events', (req, res) => {
@@ -130,7 +137,7 @@ function createApp({ dataDir, adminPassword, sessionSecret }) {
   admin.get('/export', (req, res) => {
     const stamp = new Date().toISOString().slice(0, 10);
     res.set('Content-Disposition', `attachment; filename="70-80-nights-backup-${stamp}.json"`);
-    res.json({ settings: store.getSettings(), events: store.listEvents() });
+    res.json(store.toJSON());
   });
 
   admin.post('/import', (req, res) => {
@@ -139,7 +146,7 @@ function createApp({ dataDir, adminPassword, sessionSecret }) {
     } catch (err) {
       return res.status(400).json({ error: err.message });
     }
-    res.json({ settings: store.getSettings(), events: store.listEvents() });
+    res.json(store.toJSON());
   });
 
   app.use('/api/admin', admin);

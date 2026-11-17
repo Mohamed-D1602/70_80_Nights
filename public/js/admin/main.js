@@ -6,6 +6,7 @@ import { getBackend, AuthError } from './adminApi.js';
 import { renderLoginForm } from './loginForm.js';
 import { EventPanel } from './eventPanel.js';
 import { SongsPanel } from './songsPanel.js';
+import { SitePanel } from './sitePanel.js';
 import { SongEditor } from './songEditor.js';
 
 const api = await getBackend(); // server (password) or GitHub Pages (token)
@@ -29,7 +30,7 @@ function toast(message, kind = 'ok') {
 }
 
 function confirmDiscard() {
-  return !(editor && editor.isDirty()) || confirm('You have unsaved changes to this song. Discard them?');
+  return !(editor && editor.isDirty()) || confirm('You have unsaved changes to this segment. Discard them?');
 }
 
 window.addEventListener('beforeunload', (e) => {
@@ -107,12 +108,17 @@ const actions = {
     }
   },
 
+  saveSite(fields) {
+    if (!confirmDiscard()) return;
+    return run(() => api.updateSite(fields), 'Site text saved');
+  },
+
   saveEvent(id, fields) {
     return run(() => api.updateEvent(id, fields), 'Event saved');
   },
 
   deleteEvent(event) {
-    if (!confirm(`Delete “${event.title}” and all ${event.songs.length} of its songs? This cannot be undone.`)) return;
+    if (!confirm(`Delete “${event.title}” and all ${event.songs.length} of its segments? This cannot be undone.`)) return;
     editor = null;
     return run(() => api.deleteEvent(event.id), 'Event deleted');
   },
@@ -125,7 +131,7 @@ const actions = {
   async saveSong(eventId, songId, fields) {
     const saved = await run(
       () => (songId ? api.updateSong(eventId, songId, fields) : api.addSong(eventId, fields)),
-      songId ? 'Song saved' : 'Song added'
+      songId ? 'Segment saved' : 'Segment added'
     );
     if (saved && !songId) {
       editor = null; // the "new song" form is done; switch to editing the saved song
@@ -139,7 +145,7 @@ const actions = {
     if (!confirm(`Delete “${song.title}”?`)) return;
     editor = null;
     selectedSongId = null;
-    return run(() => api.deleteSong(eventId, song.id), 'Song deleted');
+    return run(() => api.deleteSong(eventId, song.id), 'Segment deleted');
   },
 
   reorderSongs(eventId, songIds) {
@@ -205,7 +211,7 @@ function render() {
   const header = h(
     'header',
     { class: 'admin-header' },
-    h('h1', {}, '70/80 Nights — Admin'),
+    h('h1', {}, `${state.site.name} — Admin`),
     h(
       'div',
       { class: 'btn-row' },
@@ -232,7 +238,7 @@ function render() {
     : h(
         'section',
         { class: 'panel editor editor-empty' },
-        h('p', { class: 'muted' }, event ? 'Select a song on the left to edit it, or add a new one.' : 'Create an event to begin.')
+        h('p', { class: 'muted' }, event ? 'Select a program segment on the left to edit it, or add a new one.' : 'Create an evening to begin.')
       );
 
   const githubNote = repo
@@ -251,7 +257,7 @@ function render() {
     h(
       'div',
       { class: 'admin-layout' },
-      h('div', { class: 'admin-side' }, EventPanel({ state, selectedEventId, actions }), SongsPanel({ event, selectedSongId, actions })),
+      h('div', { class: 'admin-side' }, SitePanel({ site: state.site, actions }), EventPanel({ state, selectedEventId, actions }), SongsPanel({ event, selectedSongId, actions })),
       h('div', { class: 'admin-main' }, main)
     )
   );

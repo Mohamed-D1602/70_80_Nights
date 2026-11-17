@@ -30,9 +30,15 @@ async function getJson(url) {
   return res.json();
 }
 
-async function staticDb() {
-  const raw = await getJson('data/db.json');
-  return new Db(raw || { events: [] });
+// One download of data/db.json is shared by the calls made during a single
+// page load or refresh (site text + evening + upcoming list).
+let staticPromise = null;
+function staticDb() {
+  if (!staticPromise) {
+    staticPromise = getJson('data/db.json').then((raw) => new Db(raw || { events: [] }));
+    staticPromise.finally(() => setTimeout(() => (staticPromise = null), 2000)).catch(() => {});
+  }
+  return staticPromise;
 }
 
 export async function fetchCurrentEvent() {
@@ -44,4 +50,21 @@ export async function fetchEvent(id) {
   if ((await detectMode()) === 'server') return getJson(`api/events/${encodeURIComponent(id)}`);
   const event = (await staticDb()).getEvent(id);
   return event && event.published ? event : null;
+}
+
+// Front-page text: group name, tagline, about the idea, founder.
+export async function fetchSite() {
+  if ((await detectMode()) === 'server') return getJson('api/site');
+  return (await staticDb()).getSite();
+}
+
+// Summaries of all published evenings, for the "upcoming evenings" list.
+export async function fetchEvents() {
+  if ((await detectMode()) === 'server') return (await getJson('api/events')) || [];
+  const db = await staticDb();
+  const currentId = db.getSettings().currentEventId;
+  return db
+    .listEvents()
+    .filter((e) => e.published)
+    .map((e) => ({ id: e.id, title: e.title, date: e.date, venue: e.venue, songCount: e.songs.length, isCurrent: e.id === currentId }));
 }

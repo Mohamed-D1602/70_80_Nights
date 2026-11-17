@@ -217,20 +217,21 @@ export function logout() {
 export async function getState() {
   await queue;
   await ensureLoaded();
-  return clone({ settings: db.getSettings(), events: db.listEvents() });
+  return clone(db.toJSON());
 }
 
-export const createEvent = (fields) => mutate((e) => `Add event: ${e.title}`, (d) => d.createEvent(fields));
-export const duplicateEvent = (id) => mutate((e) => `Duplicate event: ${e.title}`, (d) => d.duplicateEvent(id));
-export const updateEvent = (id, fields) => mutate((e) => `Update event: ${e.title}`, (d) => d.updateEvent(id, fields));
-export const deleteEvent = (id) => mutate('Delete event', (d) => d.deleteEvent(id));
+export const updateSite = (fields) => mutate('Update site text', (d) => d.updateSite(fields));
+export const createEvent = (fields) => mutate((e) => `Add evening: ${e.title}`, (d) => d.createEvent(fields));
+export const duplicateEvent = (id) => mutate((e) => `Duplicate evening: ${e.title}`, (d) => d.duplicateEvent(id));
+export const updateEvent = (id, fields) => mutate((e) => `Update evening: ${e.title}`, (d) => d.updateEvent(id, fields));
+export const deleteEvent = (id) => mutate('Delete evening', (d) => d.deleteEvent(id));
 export const setCurrentEvent = (eventId) =>
   mutate('Change live event', (d) => (d.setCurrentEvent(eventId) ? d.getSettings() : null));
-export const addSong = (eventId, fields) => mutate((s) => `Add song: ${s.title}`, (d) => d.addSong(eventId, fields));
+export const addSong = (eventId, fields) => mutate((s) => `Add segment: ${s.title}`, (d) => d.addSong(eventId, fields));
 export const updateSong = (eventId, songId, fields) =>
-  mutate((s) => `Update song: ${s.title}`, (d) => d.updateSong(eventId, songId, fields));
-export const deleteSong = (eventId, songId) => mutate('Delete song', (d) => d.deleteSong(eventId, songId));
-export const reorderSongs = (eventId, songIds) => mutate('Reorder songs', (d) => d.reorderSongs(eventId, songIds));
+  mutate((s) => `Update segment: ${s.title}`, (d) => d.updateSong(eventId, songId, fields));
+export const deleteSong = (eventId, songId) => mutate('Delete segment', (d) => d.deleteSong(eventId, songId));
+export const reorderSongs = (eventId, songIds) => mutate('Reorder program', (d) => d.reorderSongs(eventId, songIds));
 
 export async function exportBackup() {
   return getState();

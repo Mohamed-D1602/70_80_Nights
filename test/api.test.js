@@ -36,7 +36,7 @@ after(() => {
 test('seeds the database and serves the current event publicly', async () => {
   const res = await call('GET', '/api/events/current', { auth: false });
   assert.equal(res.status, 200);
-  assert.equal(res.body.id, 'sample-event');
+  assert.equal(res.body.id, 'evening-1');
   assert.ok(res.body.songs.length > 0);
   assert.ok(fs.existsSync(path.join(dataDir, 'db.json')));
 });
@@ -76,7 +76,7 @@ test('admin can log in and manage events and songs', async () => {
   assert.deepEqual(order.body.songs.map((s) => s.title), ['Second', 'أغنية']);
 
   // Not live yet: public current event is still the seed.
-  assert.equal((await call('GET', '/api/events/current', { auth: false })).body.id, 'sample-event');
+  assert.equal((await call('GET', '/api/events/current', { auth: false })).body.id, 'evening-1');
   assert.equal((await call('PUT', '/api/admin/settings/current-event', { body: { eventId } })).status, 200);
   assert.equal((await call('GET', '/api/events/current', { auth: false })).body.id, eventId);
 
@@ -135,4 +135,16 @@ test('serves the attendee app and admin page', async () => {
   assert.match(await (await fetch(`${base}/admin.html`)).text(), /Admin/);
   // The static data file used by GitHub Pages is also served.
   assert.equal((await fetch(`${base}/data/db.json`)).status, 200);
+});
+
+test('site text: public read, admin update', async () => {
+  const pub = await call('GET', '/api/site', { auth: false });
+  assert.equal(pub.status, 200);
+  assert.ok(pub.body.name);
+  assert.equal((await call('PUT', '/api/admin/site', { body: { tagline: 'x' }, auth: false })).status, 401);
+  const upd = await call('PUT', '/api/admin/site', { body: { tagline: 'سهرة', about: 'a\r\nb' } });
+  assert.equal(upd.body.tagline, 'سهرة');
+  assert.equal(upd.body.about, 'a\nb');
+  assert.equal(upd.body.name, pub.body.name, 'partial update keeps the name');
+  assert.equal((await call('GET', '/api/admin/state')).body.site.tagline, 'سهرة');
 });

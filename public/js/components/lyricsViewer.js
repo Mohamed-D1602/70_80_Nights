@@ -7,13 +7,15 @@ import { parseLyrics } from '../lyrics.js';
 import { getPrefs, setPrefs, FONT_SIZES } from '../prefs.js';
 import { keepScreenOn } from '../wakeLock.js';
 import { SongCover } from './songList.js';
+import { VideoBlock } from '../video.js';
 
 const SWIPE_MIN_PX = 60;
 
 // Renders lyrics text as stanzas. Also used by the admin live preview.
-export function LyricsBody(text) {
+// `emptyText` (or null for nothing) is shown when there are no lyrics.
+export function LyricsBody(text, { emptyText = 'لا توجد كلمات لهذه الفقرة.' } = {}) {
   const sections = parseLyrics(text);
-  if (!sections.length) return h('p', { class: 'empty' }, 'لا توجد كلمات لهذه الأغنية بعد.');
+  if (!sections.length) return emptyText ? h('p', { class: 'empty' }, emptyText) : null;
   return h(
     'div',
     { class: 'lyrics' },
@@ -48,7 +50,7 @@ export function renderLyricsViewer(container, event, songIndex, { goTo, goHome }
   const toolbar = h(
     'div',
     { class: 'toolbar' },
-    h('button', { class: 'icon-btn', onclick: goHome, 'aria-label': 'قائمة الأغاني' }, icon('list')),
+    h('button', { class: 'icon-btn', onclick: goHome, 'aria-label': 'برنامج الليلة' }, icon('list')),
     h('span', { class: 'counter' }, `${arabicDigits(songIndex + 1)} / ${arabicDigits(total)}`),
     h(
       'div',
@@ -80,11 +82,11 @@ export function renderLyricsViewer(container, event, songIndex, { goTo, goHome }
     ? h(
         'button',
         { class: 'up-next', onclick: () => goTo(songIndex + 1) },
-        h('span', { class: 'up-next-label' }, 'الأغنية التالية'),
+        h('span', { class: 'up-next-label' }, 'الفقرة التالية'),
         h('span', { class: 'up-next-title' }, nextSong.title),
         icon('next')
       )
-    : h('p', { class: 'end-note' }, 'نهاية قائمة الليلة — شكراً لغنائكم معنا');
+    : h('p', { class: 'end-note' }, 'نهاية برنامج الليلة — شكراً لحضوركم');
 
   const bottomNav = h(
     'nav',
@@ -107,7 +109,15 @@ export function renderLyricsViewer(container, event, songIndex, { goTo, goHome }
     'div',
     { class: 'page page-lyrics' },
     toolbar,
-    h('article', { class: 'lyrics-article' }, songHeader, LyricsBody(song.lyrics), upNext),
+    h(
+      'article',
+      { class: 'lyrics-article' },
+      songHeader,
+      VideoBlock(song.videoUrl, song.title),
+      // A clip-only segment needs no "no lyrics" notice.
+      LyricsBody(song.lyrics, song.videoUrl ? { emptyText: null } : undefined),
+      upNext
+    ),
     bottomNav
   );
   container.replaceChildren(page);
