@@ -1,5 +1,4 @@
-// Home page: the group's name and tagline, the next evening and its program,
-// other upcoming evenings, and "about the idea" (all text editable in admin).
+// Program page and the segment covers it (and the segment page) use.
 
 import { h, arabicDigits, coverGradient, formatDate } from '../dom.js';
 import { icon } from '../icons.js';
@@ -58,56 +57,24 @@ function Program(event) {
   );
 }
 
-export function renderSongList(container, { site, event, upcoming }) {
-  const hero = h(
-    'header',
-    { class: 'site-hero' },
-    h('p', { class: 'eyebrow' }, icon('music'), ' ', site.name),
-    site.tagline ? h('h1', { class: 'site-tagline' }, site.tagline) : h('h1', { class: 'site-tagline' }, site.name)
-  );
-
-  const evening = event
-    ? h(
-        'section',
-        { class: 'evening', 'aria-labelledby': 'evening-title' },
-        h('p', { class: 'section-label' }, 'الليلة القادمة'),
-        h('h2', { class: 'event-title', id: 'evening-title' }, event.title),
-        meta(event) ? h('p', { class: 'event-meta' }, meta(event)) : null,
-        event.description ? h('p', { class: 'event-description' }, event.description) : null,
-        h('h3', { class: 'program-title' }, 'برنامج الليلة'),
-        Program(event)
-      )
-    : h(
-        'section',
-        { class: 'evening' },
-        h('p', { class: 'section-label' }, 'الليلة القادمة'),
-        h('p', { class: 'empty' }, 'سيُعلن موعد الليلة القادمة قريباً.')
-      );
-
-  const later = upcoming.length
-    ? h(
-        'section',
-        { class: 'upcoming' },
-        h('h2', { class: 'section-title' }, 'ليالٍ قادمة'),
+// Program page (#/program): the next evening and its segments.
+export function renderSongList(container, { site, event }) {
+  const back = h('a', { class: 'back-link', href: '#/' }, icon('prev'), site.name);
+  const content = event
+    ? [
         h(
-          'ul',
-          { class: 'upcoming-list' },
-          upcoming.map((e) => h('li', {}, h('strong', {}, e.title), meta(e) ? h('span', {}, meta(e)) : null))
-        )
-      )
-    : null;
+          'header',
+          { class: 'event-header' },
+          h('p', { class: 'section-label' }, 'برنامج الليلة'),
+          h('h1', { class: 'event-title' }, event.title),
+          meta(event) ? h('p', { class: 'event-meta' }, meta(event)) : null,
+          event.description ? h('p', { class: 'event-description' }, event.description) : null
+        ),
+        Program(event),
+      ]
+    : [h('p', { class: 'empty' }, 'يُعلن برنامج الليلة القادمة قريباً.')];
 
-  const about = site.about || site.founder
-    ? h(
-        'section',
-        { class: 'about' },
-        h('h2', { class: 'section-title' }, 'عن الفكرة'),
-        site.about ? h('div', { class: 'about-text' }, site.about) : null,
-        site.founder ? h('p', { class: 'founder' }, site.founder) : null
-      )
-    : null;
-
-  container.replaceChildren(h('div', { class: 'page page-list' }, hero, evening, later, about));
-  document.title = site.name;
+  container.replaceChildren(h('div', { class: 'page page-list' }, h('nav', { class: 'top-nav' }, back), ...content));
+  document.title = event ? `برنامج ${event.title} — ${site.name}` : site.name;
   return () => {};
 }

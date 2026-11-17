@@ -1,9 +1,10 @@
 # جمعية وطن الجمال — website
 
-Website for **جمعية وطن الجمال**, an idea by **Dr. Tigani Mursy (د. التجاني مرسي)**: a group within the Nubian association in Reading that holds about four *ليالي سمر* a year. These are family evenings around tables, with no speeches, where people listen to and watch classic Sudanese music and song clips together. The aim is "رفع الفراش": giving Sudanese families occasions to meet in joy, not only at funerals.
+Website for **جمعية وطن الجمال**, an idea by **Dr. Tigani Mursy (د. التجاني مرسي)**: *ليالي سمر* that bring families together around tables to listen to and watch classic Sudanese music and song clips, with no speeches and no formalities. About four evenings a year, run as a group within the Nubian association in Reading.
 
-- **Public site (`/`)**: Arabic, right to left, dark by default. It shows the group's tagline, the next evening and its **program** (video clips, songs, optional sing-along lyrics), other upcoming evenings, and "عن الفكرة" with the founder credit. No login.
-- **Admin page (`/admin`)**: protected by a GitHub token (GitHub Pages) or a password (Node server). Edit the front-page text, create evenings, add, reorder, and delete program segments (paste a YouTube link, lyrics optional), choose which evening is shown, and download and restore backups.
+- **Home page (`#/`)**: Arabic, right to left, in the style of a landing page. It has a night-sky header with a Nubian triangle strip, "الفكرة", "كيف تكون الليلة؟" (highlight cards), the next evening with a button to its program, upcoming evenings, "شارك معنا", and the founder credit in the footer.
+- **Program (`#/program`)** and **segments (`#/song/<id>`)**: the evening's clips, songs and optional sing-along lyrics, each with an embedded YouTube player.
+- **Admin page (`/admin`)**: protected by a GitHub token (GitHub Pages) or a password (Node server). Under **Site text** you edit every sentence on the home page, including the highlight cards (one per line: `title | description`). You can also create evenings, add, reorder, and delete program segments (paste a YouTube link), and download and restore backups.
 
 The sections below still use the code's original words: an *event* is an evening, and a *song* is a program segment.
 

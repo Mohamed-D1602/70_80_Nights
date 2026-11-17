@@ -1,5 +1,6 @@
-// Attendee app entry point: loads the site text and the current evening, and
-// routes between the home page (#/) and a program segment (#/song/<id>).
+// Public site entry point: loads the site text and the current evening, and
+// routes between the home page (#/), the evening's program (#/program) and a
+// program segment (#/song/<id>).
 //
 // Routes are hash-based so any static host works and deep links survive
 // reloads. To add pages later (e.g. #/events for past evenings, #/search),
@@ -9,6 +10,7 @@ import { fetchCurrentEvent, fetchEvents, fetchSite } from './api.js';
 import { h } from './dom.js';
 import { applyPrefs } from './prefs.js';
 import { DEFAULT_SITE } from './shared/db.js';
+import { renderHome } from './components/home.js';
 import { renderSongList } from './components/songList.js';
 import { renderLyricsViewer } from './components/lyricsViewer.js';
 
@@ -23,7 +25,8 @@ applyPrefs();
 
 function parseRoute() {
   const m = location.hash.match(/^#\/song\/([^/?]+)/);
-  return m ? { name: 'song', songId: decodeURIComponent(m[1]) } : { name: 'home' };
+  if (m) return { name: 'song', songId: decodeURIComponent(m[1]) };
+  return location.hash.startsWith('#/program') ? { name: 'program' } : { name: 'home' };
 }
 
 // Evenings after today, other than the current one, soonest first.
@@ -41,6 +44,7 @@ function viewKey(r) {
     const songs = data.event ? data.event.songs : [];
     return JSON.stringify([songs.find((s) => s.id === r.songId), songs.map((s) => [s.id, s.title]), data.event?.title]);
   }
+  if (r.name === 'program') return JSON.stringify([data.site.name, data.event]);
   return JSON.stringify([data.site, data.event, data.upcoming]);
 }
 
@@ -59,7 +63,7 @@ function route({ refresh = false } = {}) {
   if (r.name === 'song') {
     const index = event ? event.songs.findIndex((s) => s.id === r.songId) : -1;
     if (index === -1) {
-      location.replace('#/');
+      location.replace('#/program');
       return;
     }
     cleanup = renderLyricsViewer(app, event, index, {
@@ -68,11 +72,13 @@ function route({ refresh = false } = {}) {
         location.hash = `#/song/${encodeURIComponent(event.songs[i].id)}`;
       },
       goHome: () => {
-        location.hash = '#/';
+        location.hash = '#/program';
       },
     });
-  } else {
+  } else if (r.name === 'program') {
     cleanup = renderSongList(app, data);
+  } else {
+    cleanup = renderHome(app, data);
   }
 
   // Same page re-rendered after a data refresh → stay where the user was.

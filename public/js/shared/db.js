@@ -5,7 +5,7 @@
 //
 // Shape:
 // {
-//   "site": { "name", "tagline", "about", "founder" },   ← front-page text, editable in admin
+//   "site": { "name", "tagline", "about", "highlights", "join", "contact", "founder" },  ← front page, editable in admin
 //   "settings": { "currentEventId": "..." },
 //   "events": [
 //     { "id", "title", "date", "venue", "description", "published", "createdAt", "updatedAt",
@@ -187,16 +187,25 @@ function httpUrl(value) {
 
 export const DEFAULT_SITE = {
   name: 'جمعية وطن الجمال',
-  tagline: 'ليالي سمر وطرب لرفع الفراش عن الأسر السودانية',
+  tagline: 'ليالي سمر تجمع الأسر على الطرب والونسة',
   about: '',
+  highlights: '',
+  join: '',
+  contact: '',
   founder: '',
 };
 
+const multiline = (v, max) => (typeof v === 'string' ? v.replace(/\r\n?/g, '\n').trim().slice(0, max) : '');
+
+// Front-page text. `highlights` is one item per line: "title | description".
 function siteFields(f) {
   return {
     name: str(f.name, 120) || DEFAULT_SITE.name,
     tagline: str(f.tagline, 300),
-    about: typeof f.about === 'string' ? f.about.replace(/\r\n?/g, '\n').trim().slice(0, 5000) : '',
+    about: multiline(f.about, 5000),
+    highlights: multiline(f.highlights, 3000),
+    join: multiline(f.join, 2000),
+    contact: str(f.contact, 300),
     founder: str(f.founder, 200),
   };
 }
