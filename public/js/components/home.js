@@ -1,7 +1,8 @@
 // Landing page (#/): explains the idea and invites families.
 //
-//   hero (name, tagline, buttons) → the idea → how an evening goes
-//   (highlight cards) → next evening → upcoming evenings → join us → credit
+//   hero (name, tagline, buttons, illustrated scene) → the idea → how an
+//   evening goes (highlight cards) → photos → next evening → upcoming
+//   evenings → join us → credit
 //
 // All wording comes from the "Site text" panel in admin.
 
@@ -20,6 +21,45 @@ function parseHighlights(text) {
       const [title, ...rest] = line.split('|');
       return { title: title.trim(), text: rest.join('|').trim() };
     });
+}
+
+// "image link | caption | credit" per line → [{ src, caption, credit }].
+// Only https:// links and site-relative paths (e.g. photos/nile.jpg).
+function parsePhotos(text) {
+  return String(text || '')
+    .split('\n')
+    .map((line) => line.split('|').map((part) => part.trim()))
+    .filter(([src]) => src && (/^https:\/\//i.test(src) || /^[\w./-]+\.(jpe?g|png|webp|gif|avif)$/i.test(src)))
+    .map(([src, caption = '', credit = '']) => ({ src, caption, credit }));
+}
+
+function Gallery(photos) {
+  return h(
+    'section',
+    { class: 'home-section' },
+    h('h2', { class: 'section-title' }, 'صور من السودان'),
+    h(
+      'div',
+      { class: 'gallery' },
+      photos.map((p) =>
+        h(
+          'figure',
+          { class: 'photo' },
+          h('img', {
+            src: p.src,
+            alt: p.caption || '',
+            loading: 'lazy',
+            decoding: 'async',
+            // A broken link shouldn't leave an empty frame.
+            onerror: (e) => e.currentTarget.closest('figure').remove(),
+          }),
+          p.caption || p.credit
+            ? h('figcaption', {}, p.caption ? h('span', {}, p.caption) : null, p.credit ? h('small', {}, p.credit) : null)
+            : null
+        )
+      )
+    )
+  );
 }
 
 const meta = (e) => [formatDate(e.date), e.venue].filter(Boolean).join(' · ');
@@ -66,6 +106,7 @@ export function renderHome(container, { site, event, upcoming }) {
         h('a', { class: 'btn-ghost', href: '#idea', onclick: scrollTo('idea') }, 'ما هي الفكرة؟')
       )
     ),
+    h('img', { class: 'hero-scene', src: 'img/hero-scene.svg', alt: '', 'aria-hidden': 'true' }),
     h('div', { class: 'nubian-strip', 'aria-hidden': 'true' })
   );
 
@@ -93,6 +134,9 @@ export function renderHome(container, { site, event, upcoming }) {
         )
       )
     : null;
+
+  const photos = parsePhotos(site.photos);
+  const gallery = photos.length ? Gallery(photos) : null;
 
   const next = h('section', { class: 'home-section' }, NextEvening(event));
 
@@ -128,7 +172,7 @@ export function renderHome(container, { site, event, upcoming }) {
   );
 
   container.replaceChildren(
-    h('div', { class: 'home' }, hero, h('div', { class: 'page home-body' }, idea, how, next, later, join, footer))
+    h('div', { class: 'home' }, hero, h('div', { class: 'page home-body' }, idea, how, gallery, next, later, join, footer))
   );
   document.title = site.name;
   return () => {};

@@ -5,7 +5,7 @@
 //
 // Shape:
 // {
-//   "site": { "name", "tagline", "about", "highlights", "join", "contact", "founder" },  ← front page, editable in admin
+//   "site": { "name", "tagline", "about", "highlights", "join", "photos", "contact", "founder" },  ← front page, editable in admin
 //   "settings": { "currentEventId": "..." },
 //   "events": [
 //     { "id", "title", "date", "venue", "description", "published", "createdAt", "updatedAt",
@@ -191,13 +191,15 @@ export const DEFAULT_SITE = {
   about: '',
   highlights: '',
   join: '',
+  photos: '',
   contact: '',
   founder: '',
 };
 
 const multiline = (v, max) => (typeof v === 'string' ? v.replace(/\r\n?/g, '\n').trim().slice(0, max) : '');
 
-// Front-page text. `highlights` is one item per line: "title | description".
+// Front-page text. `highlights` is one item per line: "title | description";
+// `photos` is one photo per line: "image link | caption | credit".
 function siteFields(f) {
   return {
     name: str(f.name, 120) || DEFAULT_SITE.name,
@@ -205,6 +207,7 @@ function siteFields(f) {
     about: multiline(f.about, 5000),
     highlights: multiline(f.highlights, 3000),
     join: multiline(f.join, 2000),
+    photos: multiline(f.photos, 6000),
     contact: str(f.contact, 300),
     founder: str(f.founder, 200),
   };

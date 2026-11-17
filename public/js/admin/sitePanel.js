@@ -24,6 +24,12 @@ export function SitePanel({ site, actions }) {
         dir: 'auto',
         rows: 5,
       }),
+      textArea(
+        'Photos (section “صور من السودان”): one per line, written as  image link | caption | credit. Use https:// links or files uploaded to public/photos/ (e.g. photos/nile.jpg). Only use photos you have the right to share.',
+        'photos',
+        site.photos,
+        { dir: 'auto', rows: 4 }
+      ),
       textArea('Join us (section “شارك معنا”)', 'join', site.join, { dir: 'auto', rows: 3 }),
       textField('Contact line (optional: phone, WhatsApp or email shown publicly)', 'contact', site.contact, { dir: 'auto' }),
       textField('Founder / credit line (page footer)', 'founder', site.founder, { dir: 'auto' }),

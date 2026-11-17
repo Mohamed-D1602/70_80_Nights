@@ -1,41 +1,52 @@
 /* ==========================================================================
-   70/80 Nights — attendee styles
-   Dark by default (it's a night event), large high-contrast lyrics,
-   RTL-first layout. Colours are tokens so a light theme is one override.
+   جمعية وطن الجمال — public site styles
+   Bright and cheerful by default (sunny Nubian colours: Nile blue, sun
+   yellow, clay orange, palm green); a night theme for watching in a dim
+   hall is one tap away on the segment page. RTL-first; colours are tokens.
    ========================================================================== */
 
 :root,
+:root[data-theme='light'] {
+  --bg: #fff8ec;
+  --surface: #ffffff;
+  --surface-2: #fff1d6;
+  --text: #2b1d12;
+  --text-muted: #6b5a48;
+  --accent: #d9480f; /* sunset orange */
+  --accent-ink: #ffffff;
+  --chorus-bg: rgba(245, 159, 0, 0.14);
+  --border: #f1dfc2;
+  --focus: #1971c2;
+  --shadow: 0 6px 22px rgba(160, 90, 20, 0.12);
+  --nile: #1971c2;
+  --palm: #2b8a3e;
+  --sun: #f59f00;
+  --clay: #c2410c;
+  --lyrics-size: 28px;
+  --font-lyrics: 'Noto Naskh Arabic', 'Geeza Pro', 'Arial', serif;
+  --font-ui: 'Cairo', 'Segoe UI', 'Tahoma', sans-serif;
+  --radius: 16px;
+  --nav-h: 72px;
+  color-scheme: light;
+}
+
 :root[data-theme='dark'] {
   --bg: #0c0a09;
   --surface: #1c1917;
   --surface-2: #292524;
   --text: #fbf6ea;
   --text-muted: #b8ad9a;
-  --accent: #f5b544; /* warm 70s amber */
+  --accent: #f5b544;
   --accent-ink: #1c1206;
   --chorus-bg: rgba(245, 181, 68, 0.09);
   --border: #3a332d;
   --focus: #ffd98a;
-  --lyrics-size: 28px;
-  --font-lyrics: 'Noto Naskh Arabic', 'Geeza Pro', 'Arial', serif;
-  --font-ui: 'Cairo', 'Segoe UI', 'Tahoma', sans-serif;
-  --radius: 14px;
-  --nav-h: 72px;
+  --shadow: none;
+  --nile: #74c0fc;
+  --palm: #69db7c;
+  --sun: #ffd43b;
+  --clay: #ff8a65;
   color-scheme: dark;
-}
-
-:root[data-theme='light'] {
-  --bg: #f7f1e3;
-  --surface: #fffaf0;
-  --surface-2: #efe5cf;
-  --text: #1a1410;
-  --text-muted: #5f5445;
-  --accent: #a34f00;
-  --accent-ink: #fff;
-  --chorus-bg: rgba(163, 79, 0, 0.08);
-  --border: #d9cbb0;
-  --focus: #a34f00;
-  color-scheme: light;
 }
 
 *,
@@ -194,6 +205,7 @@ button {
   border: 1px solid var(--border);
   color: inherit;
   text-decoration: none;
+  box-shadow: var(--shadow);
   transition: transform 0.12s ease, border-color 0.12s ease;
 }
 
@@ -451,21 +463,31 @@ button {
   opacity: 0.85;
 }
 
-/* The hero is always "night": light text on a warm dark sky, in both themes. */
+/* Hero: a sunny Sudanese afternoon (night sky in the dark theme), with the
+   illustrated scene of the Nile, palms, a Nubian house and Meroë below. */
 .hero {
   position: relative;
+  overflow: hidden;
+  color: var(--text);
+  background:
+    radial-gradient(70% 60% at 60% 100%, rgba(255, 212, 59, 0.45), transparent 70%),
+    linear-gradient(180deg, #bfe6ff 0%, #dff2ff 45%, #fff3d6 100%);
+}
+
+:root[data-theme='dark'] .hero {
   color: #fbf6ea;
   background:
     radial-gradient(120% 80% at 50% 115%, rgba(245, 181, 68, 0.45), transparent 60%),
-    radial-gradient(60% 50% at 85% 10%, rgba(200, 85, 61, 0.35), transparent 70%),
     linear-gradient(180deg, #120d1f 0%, #24142a 55%, #3a1d1d 100%);
 }
 
 .hero-inner {
+  position: relative;
+  z-index: 1;
   max-width: 760px;
   margin: 0 auto;
-  padding: 56px 20px 44px;
-  padding-top: max(56px, calc(env(safe-area-inset-top) + 32px));
+  padding: 44px 20px 0;
+  padding-top: max(44px, calc(env(safe-area-inset-top) + 24px));
   text-align: center;
 }
 
@@ -476,11 +498,16 @@ button {
   margin: 0 0 10px;
   padding: 4px 14px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #f5b544;
-  font-weight: 600;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(217, 72, 15, 0.25);
+  color: var(--clay);
+  font-weight: 700;
   font-size: 0.9rem;
+}
+
+:root[data-theme='dark'] .hero-eyebrow {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
 }
 
 .hero-eyebrow svg {
@@ -494,6 +521,12 @@ button {
   font-size: clamp(2.3rem, 10vw, 3.6rem);
   font-weight: 700;
   line-height: 1.3;
+  color: #8f2d07;
+  text-shadow: 0 2px 0 rgba(255, 255, 255, 0.7);
+}
+
+:root[data-theme='dark'] .hero-title {
+  color: #fbf6ea;
   text-shadow: 0 2px 18px rgba(245, 181, 68, 0.25);
 }
 
@@ -502,6 +535,10 @@ button {
   max-width: 30ch;
   font-size: clamp(1.1rem, 4.5vw, 1.4rem);
   line-height: 1.6;
+  color: #4a3423;
+}
+
+:root[data-theme='dark'] .hero-tagline {
   color: #eadfca;
 }
 
@@ -510,7 +547,18 @@ button {
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
-  margin-top: 26px;
+  margin-top: 22px;
+}
+
+.hero-scene {
+  display: block;
+  width: 100%;
+  height: clamp(170px, 30vw, 400px);
+  margin-top: 8px;
+}
+
+:root[data-theme='dark'] .hero-scene {
+  filter: brightness(0.55) saturate(0.85);
 }
 
 .btn-cta,
@@ -529,10 +577,22 @@ button {
 .btn-cta {
   background: var(--accent);
   color: var(--accent-ink);
+  box-shadow: 0 6px 16px rgba(217, 72, 15, 0.3);
+  transition: transform 0.15s ease;
+}
+
+.btn-cta:active {
+  transform: scale(0.97);
 }
 
 .btn-ghost {
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: 2px solid currentColor;
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--nile);
+}
+
+:root[data-theme='dark'] .btn-ghost {
+  background: transparent;
   color: #fbf6ea;
 }
 
@@ -562,7 +622,7 @@ button {
   width: 6px;
   height: 1.1em;
   border-radius: 3px;
-  background: var(--accent);
+  background: linear-gradient(var(--nile) 0 33%, var(--sun) 33% 66%, var(--clay) 66%);
 }
 
 .prose {
@@ -586,21 +646,28 @@ button {
 }
 
 .highlight {
+  --c: var(--nile);
   padding: 16px;
   border-radius: var(--radius);
   background: var(--surface);
   border: 1px solid var(--border);
+  border-top: 5px solid var(--c);
+  box-shadow: var(--shadow);
 }
+
+.highlight:nth-child(4n + 2) { --c: var(--sun); }
+.highlight:nth-child(4n + 3) { --c: var(--clay); }
+.highlight:nth-child(4n + 4) { --c: var(--palm); }
 
 .highlight-icon {
   display: inline-grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
+  width: 46px;
+  height: 46px;
   margin-bottom: 8px;
-  border-radius: 12px;
-  background: var(--chorus-bg);
-  color: var(--accent);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--c) 15%, transparent);
+  color: var(--c);
 }
 
 .highlight strong {
@@ -622,6 +689,7 @@ button {
 }
 
 .next-card {
+  box-shadow: var(--shadow);
   padding: 20px;
   border-radius: calc(var(--radius) + 4px);
   background:
@@ -713,6 +781,43 @@ button {
   margin: 6px 0 0;
   color: var(--text-muted);
   font-size: 0.9rem;
+}
+
+/* ---------- Photo gallery ---------- */
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+  gap: 12px;
+}
+
+.photo {
+  margin: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.photo img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.photo figcaption {
+  display: grid;
+  gap: 2px;
+  padding: 8px 12px 10px;
+  font-weight: 600;
+}
+
+.photo figcaption small {
+  color: var(--text-muted);
+  font-weight: 400;
+  font-size: 0.78rem;
 }
 
 /* ---------- Program page ---------- */

@@ -6,6 +6,20 @@ Website for **جمعية وطن الجمال**, an idea by **Dr. Tigani Mursy (�
 - **Program (`#/program`)** and **segments (`#/song/<id>`)**: the evening's clips, songs and optional sing-along lyrics, each with an embedded YouTube player.
 - **Admin page (`/admin`)**: protected by a GitHub token (GitHub Pages) or a password (Node server). Under **Site text** you edit every sentence on the home page, including the highlight cards (one per line: `title | description`). You can also create evenings, add, reorder, and delete program segments (paste a YouTube link), and download and restore backups.
 
+### Adding photos ("صور من السودان")
+
+The home page has a photo gallery that only appears once you add photos. In the admin page, under **Site text → Photos**, write one photo per line:
+
+```
+photos/nile.jpg | النيل عند الغروب | تصوير: اسم المصوّر
+https://upload.wikimedia.org/…/Meroe.jpg | أهرامات مروي | Photo: name, CC BY-SA 4.0
+```
+
+- **Your own photos** (best: photos from the group's evenings or members' trips to Sudan): upload them on github.com into the `public/photos/` folder (**Add file → Upload files**), then use `photos/<file name>`. Ask the people in the photo before publishing.
+- **Wikimedia Commons**: search [commons.wikimedia.org](https://commons.wikimedia.org) for Sudan, Nile, Meroë or Nubian village. Open the photo, click **Use this file**, copy the link, and put the author and license from that box into the credit part.
+
+The header illustration (`public/img/hero-scene.svg`: the Nile, a felucca, palms, a Nubian house and the pyramids of Meroë) is original artwork made for this site, so it needs no credit.
+
 The sections below still use the code's original words: an *event* is an evening, and a *song* is a program segment.
 
 ## Features

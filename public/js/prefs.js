@@ -2,9 +2,9 @@
 // Storage can be unavailable (private mode, blocked site data), so every
 // access is wrapped and the app works fine without it.
 
-const KEY = 'nights.prefs';
+const KEY = 'nights.prefs.v2'; // v2: the bright theme became the default
 export const FONT_SIZES = [20, 24, 28, 32, 38, 44, 52];
-const DEFAULTS = { fontSizeIndex: 2, theme: 'dark' };
+const DEFAULTS = { fontSizeIndex: 2, theme: 'light' };
 
 function read() {
   try {
@@ -33,7 +33,7 @@ export function setPrefs(patch) {
 export function applyPrefs() {
   const idx = Math.min(Math.max(prefs.fontSizeIndex, 0), FONT_SIZES.length - 1);
   document.documentElement.style.setProperty('--lyrics-size', `${FONT_SIZES[idx]}px`);
-  document.documentElement.dataset.theme = prefs.theme === 'light' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = prefs.theme === 'dark' ? 'dark' : 'light';
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.content = prefs.theme === 'light' ? '#f7f1e3' : '#0c0a09';
+  if (meta) meta.content = prefs.theme === 'dark' ? '#0c0a09' : '#fff8ec';
 }

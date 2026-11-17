@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" preserveAspectRatio="xMidYMax slice" role="img" aria-label="رسم: النيل وفلوكة ونخيل وبيت نوبي وأهرامات مروي">
+  <!-- Original illustration for جمعية وطن الجمال: the Nile, a felucca, palm
+       trees, a Nubian house and the pyramids of Meroë at golden hour. -->
+
+  <!-- sun -->
+  <circle cx="720" cy="196" r="82" fill="#ffe8a3" opacity="0.6"/>
+  <circle cx="720" cy="196" r="52" fill="#ffd43b"/>
+
+  <!-- birds -->
+  <g fill="none" stroke="#6b4a2b" stroke-width="3" stroke-linecap="round" opacity="0.7">
+    <path d="M500 168q10-10 20 0q10-10 20 0"/>
+    <path d="M556 146q7-7 14 0q7-7 14 0"/>
+    <path d="M850 160q8-8 16 0q8-8 16 0"/>
+  </g>
+
+  <!-- far dunes -->
+  <path d="M0 290C180 245 380 280 600 262S1000 238 1200 268V400H0Z" fill="#f8cf98"/>
+
+  <!-- pyramids of Meroë (steep, flat-topped) -->
+  <g>
+    <polygon points="70,292 108,190 146,292" fill="#de9455"/>
+    <polygon points="108,190 146,292 108,292" fill="#b86a33"/>
+    <polygon points="150,290 178,214 206,290" fill="#de9455"/>
+    <polygon points="178,214 206,290 178,290" fill="#b86a33"/>
+    <polygon points="215,288 252,180 289,288" fill="#e6a061"/>
+    <polygon points="252,180 289,288 252,288" fill="#bf7038"/>
+    <polygon points="292,287 314,228 336,287" fill="#de9455"/>
+    <polygon points="314,228 336,287 314,287" fill="#b86a33"/>
+    <polygon points="1060,286 1092,200 1124,286" fill="#e6a061"/>
+    <polygon points="1092,200 1124,286 1092,286" fill="#bf7038"/>
+  </g>
+
+  <!-- near sand bank -->
+  <path d="M0 322C260 296 640 318 900 304S1120 300 1200 310V400H0Z" fill="#f2b56b"/>
+
+  <!-- Nubian house -->
+  <g>
+    <!-- vaulted room -->
+    <path d="M800 324V262a42 42 0 0 1 84 0V324Z" fill="#fdf3e1"/>
+    <path d="M800 262a42 42 0 0 1 84 0" fill="none" stroke="#e9d3ad" stroke-width="3"/>
+    <!-- main wall -->
+    <rect x="580" y="222" width="230" height="102" fill="#fffaf0"/>
+    <rect x="580" y="222" width="230" height="102" fill="none" stroke="#efdcbc" stroke-width="2"/>
+    <!-- painted triangle frieze -->
+    <g>
+      <polygon points="580,222 592,238 604,222" fill="#1971c2"/>
+      <polygon points="604,222 616,238 628,222" fill="#f59f00"/>
+      <polygon points="628,222 640,238 652,222" fill="#d9480f"/>
+      <polygon points="652,222 664,238 676,222" fill="#2b8a3e"/>
+      <polygon points="676,222 688,238 700,222" fill="#1971c2"/>
+      <polygon points="700,222 712,238 724,222" fill="#f59f00"/>
+      <polygon points="724,222 736,238 748,222" fill="#d9480f"/>
+      <polygon points="748,222 760,238 772,222" fill="#2b8a3e"/>
+      <polygon points="772,222 784,238 796,222" fill="#1971c2"/>
+      <polygon points="796,222 803,232 810,222" fill="#f59f00"/>
+    </g>
+    <!-- arched blue door with painted border -->
+    <path d="M664 324V278a31 31 0 0 1 62 0V324Z" fill="#f59f00"/>
+    <path d="M670 324V279a25 25 0 0 1 50 0V324Z" fill="#1971c2"/>
+    <circle cx="708" cy="300" r="3" fill="#ffd43b"/>
+    <!-- windows -->
+    <rect x="606" y="256" width="30" height="30" rx="3" fill="#1971c2"/>
+    <path d="M621 256v30M606 271h30" stroke="#fffaf0" stroke-width="3"/>
+    <rect x="752" y="256" width="30" height="30" rx="3" fill="#1971c2"/>
+    <path d="M767 256v30M752 271h30" stroke="#fffaf0" stroke-width="3"/>
+    <!-- painted flower beside the door -->
+    <g fill="#d9480f">
+      <circle cx="645" cy="300" r="5"/><circle cx="645" cy="290" r="4"/><circle cx="636" cy="296" r="4"/>
+      <circle cx="654" cy="296" r="4"/><circle cx="645" cy="309" r="3"/>
+    </g>
+    <circle cx="645" cy="298" r="3" fill="#ffd43b"/>
+  </g>
+
+  <!-- palm trees (one drawing, reused) -->
+  <defs><g id="palm">
+    <path d="M0 0C-6-42 8-84 2-126" fill="none" stroke="#8a5a2b" stroke-width="11" stroke-linecap="round"/>
+    <path d="M-2-20h8M-3-44h9M-2-68h9M0-92h9" stroke="#6f4520" stroke-width="3" stroke-linecap="round"/>
+    <g fill="#2b8a3e">
+      <path d="M2-126C-30-150-62-140-82-118C-52-132-26-130 2-118Z"/>
+      <path d="M2-126C34-150 66-140 86-118C56-132 30-130 2-118Z"/>
+      <path d="M2-126C-18-160-46-170-70-160C-42-158-20-146 2-120Z"/>
+      <path d="M2-126C22-160 50-170 74-160C46-158 24-146 2-120Z"/>
+      <path d="M2-126C-4-156 6-176 22-186C12-166 10-146 6-122Z"/>
+    </g>
+    <g fill="#c2410c"><circle cx="-6" cy="-116" r="5"/><circle cx="4" cy="-112" r="5"/><circle cx="12" cy="-117" r="5"/></g>
+  </g></defs>
+  <use href="#palm" transform="translate(520 326)"/>
+  <use href="#palm" transform="translate(930 322) scale(0.85)"/>
+  <use href="#palm" transform="translate(395 330) scale(0.7)"/>
+
+  <!-- the Nile -->
+  <path d="M0 344C300 330 900 352 1200 336V400H0Z" fill="#4dabf7"/>
+  <path d="M0 356C300 344 900 366 1200 350V400H0Z" fill="#1c7ed6"/>
+  <g fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.55">
+    <path d="M80 372q20-8 40 0"/><path d="M240 382q20-8 40 0"/><path d="M560 378q20-8 40 0"/>
+    <path d="M760 386q20-8 40 0"/><path d="M1000 374q20-8 40 0"/><path d="M1120 388q20-8 40 0"/>
+  </g>
+
+  <!-- felucca -->
+  <g>
+    <path d="M415 350L431 274L478 344Z" fill="#fffaf0" stroke="#e9d3ad" stroke-width="2"/>
+    <path d="M431 274L431 352" stroke="#6f4520" stroke-width="3"/>
+    <path d="M390 352H490L474 370H404Z" fill="#8a5a2b"/>
+    <path d="M396 358H484" stroke="#f59f00" stroke-width="3"/>
+  </g>
+</svg>
